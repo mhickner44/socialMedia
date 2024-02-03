@@ -5,7 +5,9 @@ const router = express.Router();
 // profile    displays your profile
 // profile/id   others profile
 // profile/
-
+router.get("/", function (req, res, next) {
+    res.send("authenticated")
+});
 
 
 module.exports = router;

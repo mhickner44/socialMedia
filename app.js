@@ -28,10 +28,6 @@ app.use(express.urlencoded({ extended: false }));
 
 //authenticate at editor router level?
 //middleware?
-const authMiddlware = function (req, res, next) {
-    req.body.authInfo="fuck me"
-    next()
-};
 
 
 
@@ -42,39 +38,65 @@ const authMiddlware = function (req, res, next) {
 app.use('/login', loginRouter);
 
 //put the auth middleware after so the login info doesnt need auth info
-app.use(authMiddlware)
 
+
+// const authMiddlware = function (req, res, next) {
+//   //use req.token here
+//   req.body.authInfo = "fuck me"
+//   next()
+// };
+
+function verifyToken(req, res, next) {
+  // Get auth header value
+  const bearerHeader = req.headers['authorization'];
+  // Check if bearer is undefined
+  if (typeof bearerHeader !== 'undefined') {
+    // Split at the space
+    const bearer = bearerHeader.split(' ');
+    // Get token from array
+    const bearerToken = bearer[1];
+    // Set the token
+    req.token = bearerToken;
+    // Next middleware
+    next();
+  } else {
+    // Forbidden
+    res.sendStatus(403);
+  }
+}
+
+app.use(verifyToken)
 
 //does every route need to be authenticated?
 
+app.use('/profile', profileRouter);
+
 app.use("/postFeed", postsRouter);
 
-
-app.use('/profile', profileRouter);
 
 app.use('/requests', followReqRouter);
 
 
 // // catch 404 and forward to error handler
 app.get("/", function (req, res, next) {
-    res.send("test")
+  res.send("test")
 });
 
 app.use(function (req, res, next) {
-    next(createError(404));
+  next(createError(404));
 });
 
 
 
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.send('error');
+  // render the error page
+  res.status(err.status || 500);
+  res.send('error');
 });
 
 
@@ -82,25 +104,8 @@ app.use(function (err, req, res, next) {
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
 
-function verifyToken(req, res, next) {
-    // Get auth header value
-    const bearerHeader = req.headers['authorization'];
-    // Check if bearer is undefined
-    if(typeof bearerHeader !== 'undefined') {
-      // Split at the space
-      const bearer = bearerHeader.split(' ');
-      // Get token from array
-      const bearerToken = bearer[1];
-      // Set the token
-      req.token = bearerToken;
-      // Next middleware
-      next();
-    } else {
-      // Forbidden
-      res.sendStatus(403);
-    }
-  
-  }
+
+
 
 
 module.exports = app;

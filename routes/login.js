@@ -8,7 +8,7 @@ const loginController = require("../controller/loginController");
 // /login
 
 
-router.get("/",loginController.login);
+router.post("/",loginController.login);
 
 
 // /login/createUser
