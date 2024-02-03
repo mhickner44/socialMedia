@@ -8,16 +8,12 @@ const loginController = require("../controller/loginController");
 // /login
 
 
-
-
 router.get("/",loginController.login);
 
 
 // /login/createUser
 
-// Router.get("/createUser", function (req, res, next) {
-//     res.send("create users")
-// });
+router.post("/createUser",loginController.createUser);
 
 
 //   // /login/authenticate?
