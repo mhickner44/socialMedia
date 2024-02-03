@@ -22,9 +22,6 @@ exports.login = asyncHandler(async (req, res, next) => {
             res.send("WRONG")
         }
     }
-
-    //give a token it is correct
-
    
 })
 

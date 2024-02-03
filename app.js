@@ -5,6 +5,7 @@ let profileRouter = require('./routes/profile');
 let followReqRouter = require('./routes/requests');
 let postsRouter = require('./routes/postsRoute');
 require('dotenv').config()
+const jwt = require('jsonwebtoken')
 
 var express = require('express');
 var path = require('path');
@@ -40,13 +41,23 @@ app.use('/login', loginRouter);
 //put the auth middleware after so the login info doesnt need auth info
 
 
-// const authMiddlware = function (req, res, next) {
-//   //use req.token here
-//   req.body.authInfo = "fuck me"
-//   next()
-// };
+const verifyToken = function (req, res, next) {
+  //verify the token 
 
-function verifyToken(req, res, next) {
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      req.userData = authData;
+      console.log("verified")
+      next()
+    }
+  });
+
+
+};
+
+function formatToken(req, res, next) {
   // Get auth header value
   const bearerHeader = req.headers['authorization'];
   // Check if bearer is undefined
@@ -57,6 +68,9 @@ function verifyToken(req, res, next) {
     const bearerToken = bearer[1];
     // Set the token
     req.token = bearerToken;
+
+    //decode the token here to know what user is accessing the information
+
     // Next middleware
     next();
   } else {
@@ -65,7 +79,7 @@ function verifyToken(req, res, next) {
   }
 }
 
-app.use(verifyToken)
+app.use(formatToken, verifyToken)
 
 //does every route need to be authenticated?
 
