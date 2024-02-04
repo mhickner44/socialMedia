@@ -11,7 +11,7 @@ const profileSchema = new Schema(
         comments: { type: Array, required: true },
         friends: { type: Array },
         picture: { type: String, required: true },
-        user:{type: String, required: true}
+        user: { type: Schema.Types.ObjectId },
     }, { collection: 'profile' }
 );
 

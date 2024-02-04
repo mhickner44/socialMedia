@@ -5,7 +5,7 @@ const jwt =require('jsonwebtoken')
 
 exports.login = asyncHandler(async (req, res, next) => {
     //verify that the user info is correct 
-
+console.log(req.body.username)
     let currentUser = await user.findOne({ "username": req.body.username })
 
     //if no user found 

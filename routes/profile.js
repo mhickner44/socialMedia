@@ -12,7 +12,7 @@ const profileController=require("../controller/profileController")
 //this gets your profile
 router.get("/",profileController.profile)
 
-
+router.get("/:id",profileController.profileDetail)
 
 // /:id this will get a specific users profile
 
