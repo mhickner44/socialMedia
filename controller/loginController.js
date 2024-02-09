@@ -10,19 +10,35 @@ console.log(req.body.username)
 
     //if no user found 
     if (currentUser == null) {
-        res.send("who do you know here")
+        res.json("who do you know here")
 
     } else {
         if (currentUser.password == req.body.password) {
+<<<<<<< Updated upstream
            
             jwt.sign({currentUser}, 'secretkey',  (err, token) => {
                 res.json("Heres your token " +token);
               });
+=======
+            res.json("youve logged in")
+
+>>>>>>> Stashed changes
         } else {
-            res.send("WRONG")
+            res.json("WRONG")
         }
     }
+<<<<<<< Updated upstream
    
+=======
+    
+    //give a token it is correct
+
+    // jwt.sign({user}, 'secretkey', { expiresIn: '30s' }, (err, token) => {
+    //     res.json({
+    //       token
+    //     });
+    //   });
+>>>>>>> Stashed changes
 })
 
 

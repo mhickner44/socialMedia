@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken')
 var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose')
+var cors=require("cors")
 // var = = require('./routes/editor');
 // var usersRouter = require('./routes/users');
 
@@ -30,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 //authenticate at editor router level?
 //middleware?
 
-
+app.use(cors())
 
 
 
@@ -39,6 +40,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/login', loginRouter);
 
 //put the auth middleware after so the login info doesnt need auth info
+
+//CORS 
 
 
 const verifyToken = function (req, res, next) {
@@ -93,7 +96,13 @@ app.use('/requests', followReqRouter);
 
 // // catch 404 and forward to error handler
 app.get("/", function (req, res, next) {
+<<<<<<< Updated upstream
   res.send("test")
+=======
+ 
+  res.json("changed the messagez")
+  console.log(res)
+>>>>>>> Stashed changes
 });
 
 app.use(function (req, res, next) {
