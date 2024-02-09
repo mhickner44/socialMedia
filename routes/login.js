@@ -5,12 +5,6 @@ const router = express.Router();
 const loginController = require("../controller/loginController");
 // login
 
-<<<<<<< Updated upstream
-=======
-// /login
-
-
->>>>>>> Stashed changes
 router.post("/",loginController.login);
 
 
