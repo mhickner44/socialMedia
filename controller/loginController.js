@@ -1,6 +1,7 @@
 
 const asyncHandler = require("express-async-handler");
 const user = require("../models/user")
+const jwt= require("jsonwebtoken")
 
 exports.login = asyncHandler(async (req, res, next) => {
     //verify that the user info is correct 
@@ -14,7 +15,12 @@ exports.login = asyncHandler(async (req, res, next) => {
 
     } else {
         if (currentUser.password == req.body.password) {
-            res.json("youve logged in")
+          
+            jwt.sign({currentUser}, 'secretkey',  (err, token) => {
+                res.json({
+                  token
+                });
+              });
 
         } else {
             res.json("WRONG")
@@ -23,11 +29,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     
     //give a token it is correct
 
-    // jwt.sign({user}, 'secretkey', { expiresIn: '30s' }, (err, token) => {
-    //     res.json({
-    //       token
-    //     });
-    //   });
+   
 })
 
 

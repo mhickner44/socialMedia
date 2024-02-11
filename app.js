@@ -46,7 +46,7 @@ const verifyToken = function (req, res, next) {
       res.sendStatus(403);
     } else {
       req.userData = authData;
-      console.log("verified")
+     
       next()
     }
   });
@@ -55,6 +55,7 @@ const verifyToken = function (req, res, next) {
 };
 
 function formatToken(req, res, next) {
+
   // Get auth header value
   const bearerHeader = req.headers['authorization'];
   // Check if bearer is undefined

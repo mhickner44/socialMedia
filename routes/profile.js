@@ -9,6 +9,7 @@ const profileController=require("../controller/profileController")
 // profile    displays your profile
 // profile/id   others profile
 // profile/
+
 //this gets your profile
 router.get("/",profileController.profile)
 
