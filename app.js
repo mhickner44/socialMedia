@@ -28,14 +28,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
-//authenticate at editor router level?
-//middleware?
-
 app.use(cors())
 
-
-
-//put it here?
 
 app.use('/login', loginRouter);
 
@@ -96,13 +90,10 @@ app.use('/requests', followReqRouter);
 
 // // catch 404 and forward to error handler
 app.get("/", function (req, res, next) {
-<<<<<<< Updated upstream
   res.send("test")
-=======
  
   res.json("changed the messagez")
   console.log(res)
->>>>>>> Stashed changes
 });
 
 app.use(function (req, res, next) {
