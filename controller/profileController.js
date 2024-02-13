@@ -4,6 +4,7 @@ const userModel = require("../models/user")
 
 exports.profile = asyncHandler(async (req, res, next) => {
     try {
+       
         let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
         let currentUser = await userModel.findById(req.userData.currentUser._id)
 
