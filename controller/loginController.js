@@ -1,7 +1,7 @@
 
 const asyncHandler = require("express-async-handler");
 const user = require("../models/user")
-const profile=require("../models/profile")
+const profile = require("../models/profile")
 const jwt = require("jsonwebtoken")
 
 exports.login = asyncHandler(async (req, res, next) => {
@@ -36,6 +36,8 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 
 exports.createUser = asyncHandler(async (req, res, next) => {
+
+
     //verify that the user info is correct 
 
     let userDetail = {
@@ -43,37 +45,36 @@ exports.createUser = asyncHandler(async (req, res, next) => {
         password: req.body.password,
     }
 
-
-
     //check for taken username
     let existingUser = await user.findOne({ "username": req.body.username })
 
     if (existingUser == null) {
-        console.log(existingUser)
+
         //if no user found 
         try {
-            let newUser = new user(userDetail);
 
+            let newUser = new user(userDetail);
             const result = await newUser.save();
-            console.log(result + " " + result.id)
+
             let userProfile = {
 
                 posts: [],
                 comments: [],
                 friends: [],
-                picture: "",
+                picture: "this is a new test user profile",
                 user: result.id
             }
-
             let newProfile = new profile(userProfile);
-           let newrestul = await newProfile.save();
-console.log(newrestul)
-            res.json(newUser + " user created");
+            await newProfile.save();
+
+            res.json("user created");
         } catch (err) {
             return next(err);
         };
     } else {
         res.json("username is taken");
     }
+
+
 
 })
