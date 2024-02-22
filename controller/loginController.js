@@ -12,7 +12,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
     //if no user found 
     if (currentUser == null) {
-        res.json("who do you know here")
+        res.json("no user")
 
     } else {
         if (currentUser.password == req.body.password) {
@@ -57,7 +57,6 @@ exports.createUser = asyncHandler(async (req, res, next) => {
             const result = await newUser.save();
 
             let userProfile = {
-
                 posts: [],
                 comments: [],
                 friends: [],
