@@ -39,22 +39,38 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
         
     //get user and located posts they have made 
     let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
-    let currentUser = await userModel.findById(req.userData.currentUser._id)
+    //WHY HAVE THIS?    
+    // let currentUser = await userModel.findById(req.userData.currentUser._id)
 
-    let postIDs=  yourProfile.posts
+    //array of psots from profile
+    let postIDs=  yourProfile[0].posts
     let allPosts;
-//  postIDs.forEach(onePost => {
-//     allPosts = await postModel.findById(onePost._id)
-//     });
-    for await (const results of postIDs) {
-        allPosts =  await postModel.findById(onePost._id)
-  console.log(results)
-      }
-      console.log(results)
+    //1 loop that creates a promises then make the requests
+    //try to loop through the posts and make the requests through the loopp
+
+    // console.log( postIDs[0]._id.toHexString())
+    // postIDs.forEach(onePost => {
+    // allPosts = await postModel.findById(onePost._id.toHexString())
+    // });
 
 
+    
+    //loop through that array of posts making request
+         //turn it into some json
+        //  try{ 
+        //     for await (const results of postIDs) {
+        //     allPosts =  await postModel.findById(onePost._id)
+        //     console.log(results)
+        //   }
+          
+          console.log(results)
 
-
+        res.json(results)
+    // }catch(err){
+            
+    //         res.json("failed to fetch")
+    //     }
+   
     ///search for those posts 
 })
 
