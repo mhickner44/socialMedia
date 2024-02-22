@@ -8,6 +8,8 @@ const postsController= require('../controller/postsController')
 
 router.post("/createPost",postsController.createPost)
 
+
+router.get("/userPosts",postsController.userPosts)
 // router.post("/create/:id/comment",postsController.createComment)
 
 // router.post("/create/:id/likeComment",postsController.likeComment)

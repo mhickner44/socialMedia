@@ -40,7 +40,7 @@ app.use('/login', loginRouter);
 
 const verifyToken = function (req, res, next) {
   //verify the token 
-
+ 
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
       res.sendStatus(403);
