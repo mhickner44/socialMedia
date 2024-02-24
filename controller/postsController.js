@@ -38,38 +38,31 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
     //respond with all the posts for that user
         
     //get user and located posts they have made 
-    let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
-    //WHY HAVE THIS?    
-    // let currentUser = await userModel.findById(req.userData.currentUser._id)
 
-    //array of psots from profile
-    let postIDs=  yourProfile[0].posts
-    let allPosts;
-    //1 loop that creates a promises then make the requests
-    //try to loop through the posts and make the requests through the loopp
+    try{
+        let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
 
-    // console.log( postIDs[0]._id.toHexString())
-    // postIDs.forEach(onePost => {
-    // allPosts = await postModel.findById(onePost._id.toHexString())
-    // });
+    //create promises and store them in an array
+    //loop through the promises  
+    //setup get each posts for 10
+   
+    //get post ids
+   let postArr = yourProfile[0].posts.map((post) =>post._id.toHexString())
+  //get the posts info for each other then 10 max
+  console.log(postArr[1])
 
-
-    
-    //loop through that array of posts making request
-         //turn it into some json
-        //  try{ 
-        //     for await (const results of postIDs) {
-        //     allPosts =  await postModel.findById(onePost._id)
-        //     console.log(results)
-        //   }
+  //do promise to get all of the posts 
+  let result =postArr.map((post) =>post= postModel.findById(post))
+//   let result =await postModel.findById(postArr[0])
+//promise loop through all of these
+console.log(result)
           
-          console.log(results)
 
-        res.json(results)
-    // }catch(err){
+        res.json(result)
+    }catch(err){
             
-    //         res.json("failed to fetch")
-    //     }
+            res.json("failed to fetch")
+        }
    
     ///search for those posts 
 })
