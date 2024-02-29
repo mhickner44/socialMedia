@@ -40,22 +40,19 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
     //get user and located posts they have made 
 
     try{
-        let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
+      
+    let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
 
-    //create promises and store them in an array
-    //loop through the promises  
-    //setup get each posts for 10
-   
     //get post ids
-   let postArr = yourProfile[0].posts.map((post) =>post._id.toHexString())
-  //get the posts info for each other then 10 max
-  console.log(postArr[1])
+     let postArr = yourProfile[0].posts.map((post) =>post._id.toHexString())
+   
+    //get the posts
+    let postContent= await postModel.find( {'_id':{ $in:postArr}} )
 
-  //do promise to get all of the posts 
-  let result =postArr.map((post) =>post= postModel.findById(post))
-//   let result =await postModel.findById(postArr[0])
-//promise loop through all of these
-console.log(result)
+   
+    //create a group of ids 
+
+    let result= postContent
           
 
         res.json(result)
