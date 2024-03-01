@@ -61,7 +61,8 @@ exports.createUser = asyncHandler(async (req, res, next) => {
                 comments: [],
                 friends: [],
                 picture: "this is a new test user profile",
-                user: result.id
+                user: result.id,
+                requests:[]
             }
             let newProfile = new profile(userProfile);
             await newProfile.save();

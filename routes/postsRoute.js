@@ -5,6 +5,7 @@ const postsController= require('../controller/postsController')
 // postFeed/postId/commentID/like
 // postFeed/postId/comment/create
 // postFeed/postId/comment/like
+router.get("/",postsController.feed)
 
 router.post("/createPost",postsController.createPost)
 
