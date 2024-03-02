@@ -61,7 +61,7 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
     let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
 
     //get post ids
-     let postArr = yourProfile[0].posts.map((post) =>post._id.toHexString())
+     let postArr = yourProfile[0].posts.map((post) =>post._id.toString())
    
     //get the posts
     let postContent= await postModel.find( {'_id':{ $in:postArr}} )

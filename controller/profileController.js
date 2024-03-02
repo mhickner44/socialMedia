@@ -4,7 +4,7 @@ const userModel = require("../models/user")
 
 exports.profile = asyncHandler(async (req, res, next) => {
     try {
-       
+
         let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
         let currentUser = await userModel.findById(req.userData.currentUser._id)
 
@@ -15,9 +15,8 @@ exports.profile = asyncHandler(async (req, res, next) => {
             posts: yourProfile[0].posts,
             postTotal: yourProfile[0].posts.length,
             friendTotal: yourProfile[0].friends.length
-            
+
         }
-     
         res.json(profileInfo)
     } catch {
         res.json("getting profile error");
@@ -26,20 +25,32 @@ exports.profile = asyncHandler(async (req, res, next) => {
 });
 
 
-exports.profileDetail = asyncHandler(async (req, res, next) => {
 
-    let profile = await profileModel.findById(req.params.id)
-    let user = await userModel.findById(profile.user._id.toString())
-    console.log(user.username)
+exports.userProfile = asyncHandler(async (req, res, next) => {
+    //usersname changed to object id 
+    let username = req.body.username
 
-    let profileInfo = {
-        profilePic: profile.picture,
-        username: user.username,
-        posts: profile.posts,
-        postTotal: profile.posts.length,
-        friendTotal: profile.friends.length
+    try {
+
+        let user = await userModel.find({ 'username': username })
+    
+        userID = user[0]._id.toHexString()
+
+        let profile = await profileModel.find({ 'user': userID })
+
+        profile = profile[0]
+        
+        let profileInfo = {
+            profilePic: profile.picture,
+            username: username,
+            posts: profile.posts,
+            postTotal: profile.posts.length,
+            friendTotal: profile.friends.length
+        }
+        
+        res.json(profileInfo)
+    } catch {
+        res.json("went wrong")
     }
-
-    res.json(profileInfo)
 
 });
