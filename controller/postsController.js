@@ -55,23 +55,27 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
     //respond with all the posts for that user
         
     //get user and located posts they have made 
+let yourProfile,postArr,postContent;
 
     try{
-      
-    let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
 
-    //get post ids
-     let postArr = yourProfile[0].posts.map((post) =>post._id.toString())
-   
-    //get the posts
-    let postContent= await postModel.find( {'_id':{ $in:postArr}} )
+        if (req.headers.user != "undefined") {
+            user = await userModel.find({ 'username': req.headers.user })
+       
 
+            userID = user[0]._id.toHexString()
+              yourProfile = await profileModel.find({ user: userID})
+
+        }
+        else{
+        yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
+        }
+        postArr = yourProfile[0].posts.map((post) =>post._id.toString())
+        postContent= await postModel.find( {'_id':{ $in:postArr}} )
    
     //create a group of ids 
-
-    let result= postContent
+        let result= postContent
           
-
         res.json(result)
     }catch(err){
             
