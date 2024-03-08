@@ -3,53 +3,77 @@ const profileModel = require('../models/profile')
 const userModel = require("../models/user")
 
 exports.profile = asyncHandler(async (req, res, next) => {
+    let currentFriend = false;
     let userID;
     let user;
-    
+    let givenUser = req.headers.user
+    // false= your profile true = someone elses 
+    let reqType = false;
     try {
 
+        //your own profile
+
+        let currentUser = await userModel.findById(req.userData.currentUser._id)
+        //change currentFriend status to something that marks it as your own?
+        let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
+
+      
         //is your profile or another persons?
-        if (req.headers.user != "undefined") {
+        if (givenUser != undefined) {
             //another user 
-            user = await userModel.find({ 'username': req.headers.user })
+            user = await userModel.find({ 'username': givenUser })
             console.log("user id " + user)
 
             userID = user[0]._id.toHexString()
 
             user = user[0]
-        } else {
-            //your own profile
-            userID = req.userData.currentUser._id
-            user = await userModel.findById(req.userData.currentUser._id)
-        }
+            reqType = true;
 
-        let yourProfile = await profileModel.find({ user: userID })
+            //get users  profile
+            let reqProfile = await profileModel.find({ user: userID })
 
-        //check to see if you are friends are not 
-        //loop all of the friends 
-        let currentFriend=false ;
-console.log("user id of current user "+  userID)
-console.log( yourProfile[0].friends)
+            //setting current friend status
+           
+            yourProfile[0].friends.forEach(friend => {
+                friend = friend._id.toHexString()
+               
+                //or if its your own or just change 
+                //if the current user profile im getting matches the one I got and is in my friends then it is a freind
+                if (friend === userID) {
+                    currentFriend = true;
+                }
+            });
 
-         yourProfile[0].friends.forEach(friend => {
-            friend=friend._id.toHexString()
-            // console.log( friend)
-            // console.log(userID)
-          
-            if (friend === userID) {
-                currentFriend = true;
+            //check to see if you are friends are not 
+
+            let profileInfo = {
+                profilePic: reqProfile[0].picture,
+                username: user.username,
+                posts: reqProfile[0].posts,
+                postTotal: reqProfile[0].posts.length,
+                friendTotal: reqProfile[0].friends.length,
+                currentFriend: currentFriend,
+                reqType: reqType
             }
-        });
+            res.json(profileInfo)
 
-        let profileInfo = {
-            profilePic: yourProfile[0].picture,
-            username: user.username,
-            posts: yourProfile[0].posts,
-            postTotal: yourProfile[0].posts.length,
-            friendTotal: yourProfile[0].friends.length,
-            currentFriend:currentFriend
+        } else {
+            let profileInfo = {
+                profilePic: yourProfile[0].picture,
+                username: currentUser.username,
+                posts: yourProfile[0].posts,
+                postTotal: yourProfile[0].posts.length,
+                friendTotal: yourProfile[0].friends.length,
+                currentFriend: currentFriend,
+                reqType: reqType
+            }
+
+            res.json(profileInfo)
         }
-        res.json(profileInfo)
+
+
+        //if it is just your profile
+
     } catch {
         res.json("getting profile error");
     }
