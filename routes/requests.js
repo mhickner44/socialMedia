@@ -10,4 +10,5 @@ const reqController= require('../controller/requestsController')
 router.post("/",reqController.reqFriend)
 
 router.post("/confirmFriend",reqController.confirmFriend)
+
 module.exports = router;

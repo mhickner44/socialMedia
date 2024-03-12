@@ -11,7 +11,7 @@ exports.reqFriend = asyncHandler(async (req, res, next) => {
 
     console.log("user being freindined " + filter + " user trying to friend " + req.userData.currentUser._id)
     // function findOneAndUpdate(filter, update, options
-//you and other user changing their freind status
+    //you and other user changing their freind status
      await profileModel.findOneAndUpdate({ "user": req.body.friendedUser }, { "$push": { requests: req.userData.currentUser._id } })
 
     

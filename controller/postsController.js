@@ -13,7 +13,7 @@ exports.feed=asyncHandler(async (req, res, next) => {
    
    
        //search posts for created by these users 
-      console.log(friendsList) 
+    
    
      let posts=  await postModel.find( {'user':{ $in:friendsList[0].friends}} )
    
@@ -70,13 +70,13 @@ let yourProfile,postArr,postContent;
         else{
         yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
         }
+       
         postArr = yourProfile[0].posts.map((post) =>post._id.toString())
+
         postContent= await postModel.find( {'_id':{ $in:postArr}} )
    
-    //create a group of ids 
-        let result= postContent
-          
-        res.json(result)
+   
+        res.json(postContent)
     }catch(err){
             
             res.json("failed to fetch")
