@@ -11,4 +11,6 @@ router.post("/",reqController.reqFriend)
 
 router.post("/confirmFriend",reqController.confirmFriend)
 
+router.get("/pending",reqController.getPending)
+
 module.exports = router;
