@@ -53,7 +53,7 @@ exports.getPending = asyncHandler(async (req, res, next) => {
 
         let users = await userModel.find({ '_id': { $in: yourProfile[0].requests } }).select("-password")
 
- 
+
         let response = {
             requestsID: users
 
@@ -67,3 +67,52 @@ exports.getPending = asyncHandler(async (req, res, next) => {
     // return requests
 });
 
+
+
+//get users feed 
+
+exports.getFeed = asyncHandler(async (req, res, next) => {
+
+    try {
+
+
+        let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
+
+        let friends = yourProfile[0].friends
+
+        let response = await postModel.find({ 'user': { $in: friends } }).sort({ createdAt: -1 }).limit(2)
+
+
+        res.json(response)
+    } catch (err) {
+        res.json("failed to get pending requests")
+    }
+
+});
+
+
+
+exports.refreshFeed = asyncHandler(async (req, res, next) => {
+
+    try {
+        //getting th profile for later
+        let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
+
+
+        let friends = yourProfile[0].friends
+
+    
+        //  { $gte: new Date(date).toISOString() }
+        let response = await postModel.find({
+            'user': { $in: friends },
+            'createdAt': { $lt: req.body.lastPost }
+        }).sort({ createdAt: -1 }).limit(5);
+
+
+        res.json(response)
+
+    } catch (err) {
+        res.json("failed to get pending requests")
+    }
+
+});

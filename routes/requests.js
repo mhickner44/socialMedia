@@ -13,4 +13,8 @@ router.post("/confirmFriend",reqController.confirmFriend)
 
 router.get("/pending",reqController.getPending)
 
+router.get("/feed",reqController.getFeed)
+
+router.get("/refreshFeed",reqController.refreshFeed)
+
 module.exports = router;

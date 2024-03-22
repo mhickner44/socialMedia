@@ -11,7 +11,7 @@ const postSchema = new Schema(
         content: { type: String, required: true },
         user: {type: Schema.Types.ObjectId },
         comments: {type: Array}
-    }, { collection: 'posts' }
+    }, { timestamps: true }, { collection: 'posts' }
 );
 
 
@@ -21,6 +21,8 @@ const postSchema = new Schema(
 //     // We don't use an arrow function as we'll need the this object
 //     return `/category/${this._id}`;
 // });
+
+// postSchema.set(timestamps,true)
 
 
 // Export model
