@@ -80,7 +80,7 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
 
         let friends = yourProfile[0].friends
 
-        let response = await postModel.find({ 'user': { $in: friends } }).sort({ createdAt: -1 }).limit(2)
+        let response = await postModel.find({ 'user': { $in: friends } }).sort({ createdAt: -1 }).limit(5)
 
 
         res.json(response)
@@ -105,7 +105,7 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
         //  { $gte: new Date(date).toISOString() }
         let response = await postModel.find({
             'user': { $in: friends },
-            'createdAt': { $lt: req.body.lastPost }
+            'createdAt': { $lt: req.headers.lastpost}
         }).sort({ createdAt: -1 }).limit(5);
 
 

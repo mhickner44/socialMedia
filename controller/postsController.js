@@ -55,7 +55,7 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
     //respond with all the posts for that user
         
     //get user and located posts they have made 
-let yourProfile,postArr,postContent;
+    let yourProfile,postArr,postContent;
 
     try{
 
