@@ -80,10 +80,59 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
 
         let friends = yourProfile[0].friends
 
-        let response = await postModel.find({ 'user': { $in: friends } }).sort({ createdAt: -1 }).limit(5)
+        let postFeed = await postModel.find({ 'user': { $in: friends } }).sort({ createdAt: -1 }).limit(5)
+        //loop through the user and then exchange that section of the post iwth a username 
+
+        let userArr = [];
+        // console.log("before "+postFeed)
 
 
-        res.json(response)
+        postFeed.map(function (element) {
+            //remove the 
+            let currentUser = element.user.toHexString()
+
+            userArr.push(currentUser)
+        })
+
+        //
+        //get the usernames of each id here
+        let usernames = await userModel.find({ _id: { "$in": userArr } })
+        //try to toobject in a loop[ 
+
+        //convert to a mutable object
+        let newFeed = postFeed.map(function (element, index) {
+
+            return element.toObject()
+        })
+
+    
+        // let responseJSon
+
+        newFeed.forEach(function (element, index) {
+            //remove the 
+            // console.log(element.user.toHexString())
+            //loop through and change it for the correc tone
+
+            let currentUser = element.user.toHexString()
+            //remove the 
+
+            usernames.forEach((e) => {
+
+
+                if (currentUser == e._id.toHexString()) {
+                    //replace it with the correct usernames 
+
+
+                    currentUser = e.username
+                }
+
+            })
+            element["username"] = currentUser
+
+        })
+        //find all usernames 
+
+        res.json(newFeed)
     } catch (err) {
         res.json("failed to get pending requests")
     }
@@ -101,11 +150,11 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
 
         let friends = yourProfile[0].friends
 
-    
+
         //  { $gte: new Date(date).toISOString() }
         let response = await postModel.find({
             'user': { $in: friends },
-            'createdAt': { $lt: req.headers.lastpost}
+            'createdAt': { $lt: req.headers.lastpost }
         }).sort({ createdAt: -1 }).limit(5);
 
 
