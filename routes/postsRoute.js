@@ -16,4 +16,6 @@ router.get("/userPosts",postsController.userPosts)
 // router.post("/create/:id/likeComment",postsController.likeComment)
 
 
+router.get("/post",postsController.post)
+
 module.exports = router;

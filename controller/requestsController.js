@@ -152,13 +152,61 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
 
 
         //  { $gte: new Date(date).toISOString() }
-        let response = await postModel.find({
+        let postFeed = await postModel.find({
             'user': { $in: friends },
             'createdAt': { $lt: req.headers.lastpost }
         }).sort({ createdAt: -1 }).limit(5);
 
 
-        res.json(response)
+
+        let userArr = [];
+
+        postFeed.map(function (element) {
+            //remove the 
+            let currentUser = element.user.toHexString()
+
+            userArr.push(currentUser)
+        })
+
+        //
+        //get the usernames of each id here
+        let usernames = await userModel.find({ _id: { "$in": userArr } })
+        //try to toobject in a loop[ 
+
+        //convert to a mutable object
+        let newFeed = postFeed.map(function (element, index) {
+
+            return element.toObject()
+        })
+
+    
+        // let responseJSon
+
+        newFeed.forEach(function (element, index) {
+            //remove the 
+            // console.log(element.user.toHexString())
+            //loop through and change it for the correc tone
+
+            let currentUser = element.user.toHexString()
+            //remove the 
+
+            usernames.forEach((e) => {
+
+
+                if (currentUser == e._id.toHexString()) {
+                    //replace it with the correct usernames 
+
+
+                    currentUser = e.username
+                }
+
+            })
+            element["username"] = currentUser
+
+        })
+
+
+        res.json(newFeed)
 
     } catch (err) {
         res.json("failed to get pending requests")

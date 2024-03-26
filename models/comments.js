@@ -9,9 +9,9 @@ const commentSchema = new Schema(
     {
         userID: { type: String, required: true },
         comment: { type: String, required: true },
-        likes: { type: Integer },
+        likes: { type: Number },
         postID: {type: String, required: true }
-    }, { collection: 'posts' }
+    }, { collection: 'comments' }
 );
 
 

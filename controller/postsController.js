@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const postModel=require("../models/posts")
 const userModel=require("../models/user")
 const profileModel= require("../models/profile")
+const commentModel = require("../models/comments")
 
 exports.feed=asyncHandler(async (req, res, next) => {
     // -take friends list and return any posts that match their friends 
@@ -86,7 +87,67 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
 })
 
 
+exports.post = asyncHandler(async (req, res, next) => {
 
+
+
+    
+     try{
+    //get the post information 
+    let post= await postModel.findById(req.headers.postid)
+    
+    let poster= await userModel.find({ _id: post.user.toHexString()})
+
+   
+
+    let comments=await commentModel.find({ '_id': { $in: post.comments }})
+   
+    //get the users from the comments
+    let commentUsers= comments.map(function (element) {
+                return element.userID})
+             
+  //get the usernames of each id here
+  let usernames = await userModel.find({ _id: { "$in": commentUsers } })
+
+// //get the users for each object 
+// let usernames = await userModel.find({ _id: { "$in": comments. } })
+        comments = comments.map(function (element, index) {
+
+            return element.toObject()
+        })
+
+
+        comments.forEach(function (element) {
+           
+            let currentUser = element.userID
+
+            usernames.forEach((e) => {
+            
+                if (currentUser == e._id.toHexString()) {
+                    //replace it with the correct usernames 
+                    currentUser = e.username
+                }
+            })
+            element["userID"] = currentUser
+        })
+
+
+
+        
+    responsejSON={
+        post:post,
+        poster:poster[0].username,
+        comments:comments
+    }
+//     console.log(comments)
+    //get the comments json as well
+
+    res.json(responsejSON)
+    }catch{
+    res.json("error returning post")
+    }
+
+})
 
 // // create comments
 // exports.comment = asyncHandler(async (req, res, next) => {
