@@ -130,13 +130,18 @@ exports.post = asyncHandler(async (req, res, next) => {
             })
             element["userID"] = currentUser
         })
+post.to
 
 
+//getting the user who made the post
+       
+        post=post.toObject();
+        post.username=poster[0].username
+   
 
         
     responsejSON={
         post:post,
-        poster:poster[0].username,
         comments:comments
     }
 //     console.log(comments)
