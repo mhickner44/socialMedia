@@ -7,10 +7,10 @@ const commentSchema = new Schema(
     //kwhat will i want accesible 
     //thers only two things
     {
-        userID: { type: String, required: true },
+        userID: {type: Schema.Types.ObjectId, required: true },
         comment: { type: String, required: true },
         likes: { type: Number },
-        postID: {type: String, required: true }
+        postID: {type: Schema.Types.ObjectId , required: true }
     }, { collection: 'comments' }
 );
 
