@@ -13,6 +13,7 @@ router.post("/createComment",postsController.createComment)
 
 router.post("/likePost",postsController.likePost)
 
+router.post("/likeComment",postsController.likeComment)
 
 router.get("/post",postsController.post)
 

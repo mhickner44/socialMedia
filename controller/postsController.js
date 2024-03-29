@@ -193,15 +193,33 @@ exports.likePost = asyncHandler(async (req, res, next) => {
         //get the id of the post and place it in the comment update 
         console.log(req.body.postID)
 
-        await postModel.findOneAndUpdate({ _id: req.body.postID }, { $inc: { "likes": 1 } })
+       let postINFO= await postModel.findOneAndUpdate({ _id: req.body.postID }, { $inc: { "likes": 1 } })
 
 
         // let commentUpdate= await comment.findOneAndUpdate({_id:req.headers.id})
-        res.json("like post ")
+        res.json(postINFO)
     } catch {
         res.json("did not like ")
     }
 
 })
+
+
+exports.likeComment = asyncHandler(async (req, res, next) => {
+    try {
+        //get the id of the post and place it in the comment update 
+        
+
+       let commentInfo= await commentModel.findOneAndUpdate({ _id: req.body.commentID }, { $inc: { "likes": 1 } })
+
+
+        // let commentUpdate= await comment.findOneAndUpdate({_id:req.headers.id})
+        res.json(commentInfo)
+    } catch {
+        res.json("did not like ")
+    }
+
+})
+
 
 
