@@ -54,7 +54,9 @@ exports.createPost = asyncHandler(async (req, res, next) => {
 
 // // create comments
 exports.createComment = asyncHandler(async (req, res, next) => {
+
     try {
+        console.log(req.body)
         let commentDetail = {
             userID: req.userData.currentUser._id,
             comment: req.body.comment,
@@ -180,6 +182,24 @@ exports.post = asyncHandler(async (req, res, next) => {
         res.json(responsejSON)
     } catch {
         res.json("error returning post")
+    }
+
+})
+
+
+
+exports.likePost = asyncHandler(async (req, res, next) => {
+    try {
+        //get the id of the post and place it in the comment update 
+        console.log(req.body.postID)
+
+        await postModel.findOneAndUpdate({ _id: req.body.postID }, { $inc: { "likes": 1 } })
+
+
+        // let commentUpdate= await comment.findOneAndUpdate({_id:req.headers.id})
+        res.json("like post ")
+    } catch {
+        res.json("did not like ")
     }
 
 })

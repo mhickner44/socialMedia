@@ -10,6 +10,7 @@ const postSchema = new Schema(
         title: { type: String, required: true },
         content: { type: String, required: true },
         user: {type: Schema.Types.ObjectId },
+        likes:{type: Number},
         comments: {type: Array}
     }, { timestamps: true }, { collection: 'posts' }
 );
