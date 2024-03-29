@@ -208,10 +208,8 @@ exports.likePost = asyncHandler(async (req, res, next) => {
 exports.likeComment = asyncHandler(async (req, res, next) => {
     try {
         //get the id of the post and place it in the comment update 
-        
-
+    
        let commentInfo= await commentModel.findOneAndUpdate({ _id: req.body.commentID }, { $inc: { "likes": 1 } })
-
 
         // let commentUpdate= await comment.findOneAndUpdate({_id:req.headers.id})
         res.json(commentInfo)

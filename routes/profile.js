@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const profileController=require("../controller/profileController")
+const profileController = require("../controller/profileController")
 
 // const profileModel=require('../models/profile')
 
@@ -11,9 +11,16 @@ const profileController=require("../controller/profileController")
 // profile/
 
 //this gets your profile
-router.get("/",profileController.profile)
 
-// router.get("/userProfile",profileController.userProfile)
+
+router.get("/", profileController.profile)
+
+
+
+
+
+
+
 
 // /:id this will get a specific users profile
 

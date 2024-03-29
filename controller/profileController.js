@@ -7,7 +7,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
     let userID;
     let user;
     let givenUser = req.headers.user
-    let pendingReq=false
+    let pendingReq = false
     // false= your profile true = someone elses 
     let reqType = false;
     console.log(givenUser)
@@ -19,7 +19,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
         //change currentFriend status to something that marks it as your own?
         let yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
 
-      
+
         //is your profile or another persons?
         if (givenUser != "undefined") {
             //another user 
@@ -28,7 +28,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
 
 
             userID = user[0]._id.toHexString()
-     
+
             user = user[0]
             reqType = true;
 
@@ -46,7 +46,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
                     currentFriend = true;
                 }
             });
-            
+
             //checking requests to see if you have one pending
             reqProfile[0].requests.forEach(request => {
                 request = request._id.toHexString()
@@ -57,7 +57,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
                     pendingReq = true;
                 }
             });
-        
+
             //check to see if you are friends are not 
 
             let guestInfo = {
@@ -74,7 +74,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
             res.json(guestInfo)
 
         } else {
-          
+
             let profileInfo = {
                 profilePic: yourProfile[0].picture,
                 username: currentUser.username,
@@ -97,7 +97,6 @@ exports.profile = asyncHandler(async (req, res, next) => {
     }
 
 });
-
 
 
 // exports.userProfile = asyncHandler(async (req, res, next) => {

@@ -10,7 +10,18 @@ const jwt = require('jsonwebtoken')
 var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose')
-var cors=require("cors")
+var cors = require("cors")
+
+const multer = require('multer');
+const fs = require('fs');
+const cloudinary = require('cloudinary').v2
+
+cloudinary.config({
+  cloud_name: 'dvef6co9u',
+  api_key: process.env.cloudKey,
+  api_secret: process.env.cloudSecret
+});
+
 // var = = require('./routes/editor');
 // var usersRouter = require('./routes/users');
 
@@ -20,6 +31,8 @@ const mongoDb = process.env.mongoConnectionURI;
 mongoose.connect(mongoDb);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
+
+
 
 
 
@@ -40,13 +53,13 @@ app.use('/login', loginRouter);
 
 const verifyToken = function (req, res, next) {
   //verify the token 
- 
+
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
       req.userData = authData;
-     
+
       next()
     }
   });
@@ -85,14 +98,62 @@ app.use('/profile', profileRouter);
 
 app.use("/postFeed", postsRouter);
 
-
 app.use('/requests', followReqRouter);
 
+
+//file upload 
+
+const profileModel = require('./models/profile')
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, 'fileStorage/')
+  },
+  filename: (req, file, callback) => {
+    let filename = `image-${Date.now()}.${file.originalname}`
+    callback(null, filename)
+    req.filename = filename
+    req.name = file.originalname
+  }
+})
+const upload = multer({ storage });
+
+app.use('/uploads', express.static(path.join(__dirname, 'fileStorage')));
+
+app.post('/uploads', upload.single('picture'), async function (req, res) {
+  try {
+    let cloudRES = await cloudinary.uploader.upload(`/home/mhick/repos/socialMedia/fileStorage/${req.filename}`,
+
+      { folder: "devTop", public_id: req.name },
+      function (error, result) { console.log(result) });
+    //delete the picture from the project
+
+    fs.unlink(`fileStorage/${req.filename}`, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log('File deleted successfully');
+    });
+
+    //store this in the user profile 
+
+
+    console.log(req.userData.currentUser._id)
+    // find and updat
+    let response = await profileModel.findOneAndUpdate({ user: req.userData.currentUser._id }, { "profilePic": cloudRES.url }, { new: true })
+
+
+    res.json(response)
+  }
+  catch { res.json("error in profile pic uplaod") }
+})
 
 // // catch 404 and forward to error handler
 app.get("/", function (req, res, next) {
   res.send("test")
- 
+
   res.json("changed the messagez")
   console.log(res)
 });

@@ -12,6 +12,7 @@ const profileSchema = new Schema(
         friends: { type: [Schema.Types.ObjectId] },
         picture: { type: String, required: true },
         user: { type: Schema.Types.ObjectId, required: true },
+        profilePic:{type: String},
         requests: { type: [Schema.Types.ObjectId], required: true },
     }, { collection: 'profile' }
 );
