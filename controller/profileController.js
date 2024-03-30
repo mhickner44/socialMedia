@@ -61,7 +61,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
             //check to see if you are friends are not 
 
             let guestInfo = {
-                profilePic: reqProfile[0].picture,
+                profilePic: reqProfile[0].profilePic,
                 username: user.username,
                 posts: reqProfile[0].posts,
                 postTotal: reqProfile[0].posts.length,
@@ -69,14 +69,15 @@ exports.profile = asyncHandler(async (req, res, next) => {
                 currentFriend: currentFriend,
                 requested: pendingReq,
                 reqType: reqType,
-                userID: userID
+                userID: userID,
+                
             }
             res.json(guestInfo)
 
         } else {
 
             let profileInfo = {
-                profilePic: yourProfile[0].picture,
+                profilePic: yourProfile[0].profilePic,
                 username: currentUser.username,
                 posts: yourProfile[0].posts,
                 postTotal: yourProfile[0].posts.length,

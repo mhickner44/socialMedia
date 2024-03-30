@@ -72,6 +72,7 @@ function formatToken(req, res, next) {
   // Get auth header value
   const bearerHeader = req.headers['authorization'];
   // Check if bearer is undefined
+ 
   if (typeof bearerHeader !== 'undefined') {
     // Split at the space
     const bearer = bearerHeader.split(' ');
@@ -125,7 +126,7 @@ app.post('/uploads', upload.single('picture'), async function (req, res) {
   try {
     let cloudRES = await cloudinary.uploader.upload(`/home/mhick/repos/socialMedia/fileStorage/${req.filename}`,
 
-      { folder: "devTop", public_id: req.name },
+      { folder: "devTop", public_id: req.userData.currentUser.username+req.name },
       function (error, result) { console.log(result) });
     //delete the picture from the project
 
