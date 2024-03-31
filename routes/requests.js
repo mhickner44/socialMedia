@@ -18,5 +18,6 @@ router.get("/feed",reqController.getFeed)
 router.get("/refreshFeed",reqController.refreshFeed)
 
 
+router.get("/users",reqController.users)
 
 module.exports = router;

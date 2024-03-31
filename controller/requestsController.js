@@ -105,7 +105,7 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
             return element.toObject()
         })
 
-    
+
         // let responseJSon
 
         newFeed.forEach(function (element, index) {
@@ -179,7 +179,7 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
             return element.toObject()
         })
 
-    
+
         // let responseJSon
 
         newFeed.forEach(function (element, index) {
@@ -213,3 +213,36 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
     }
 
 });
+
+exports.users = asyncHandler(async (req, res, next) => {
+
+    try {
+
+        let currentUser = await profileModel.find({ user: req.userData.currentUser._id })
+
+        //add yourself
+        currentUser[0].friends.push(req.userData.currentUser._id)
+
+        //return users that arent your friend
+        let users = await userModel.find({ _id: { $nin: currentUser[0].friends } }).limit(20)
+        
+        //just usernames  
+        users = users.map((e) => {
+            return e.username
+        })
+
+        res.json(users)
+    } catch {
+        res.json("no users for you")
+    }
+
+
+
+});
+
+
+
+
+
+
+
