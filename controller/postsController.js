@@ -17,7 +17,9 @@ exports.feed = asyncHandler(async (req, res, next) => {
 
 
     let posts = await postModel.find({ 'user': { $in: friendsList[0].friends } })
-
+    posts = posts.toObject()
+    
+    posts.createdAt = posts.createdAt.toISOString().substring(0, 10);
     res.json(posts)
 })
 
@@ -127,10 +129,14 @@ exports.post = asyncHandler(async (req, res, next) => {
     try {
         //get the post information 
         let post = await postModel.findById(req.headers.postid)
-
+       
+        
         let poster = await userModel.find({ _id: post.user.toHexString() })
 
-
+        post = post.toObject()
+        // post.createdAt = post.createdAt.substring(0, 10)
+        post.createdAt = post.createdAt.toISOString().substring(0, 10);
+        
 
         let comments = await commentModel.find({ '_id': { $in: post.comments } })
 
@@ -167,7 +173,7 @@ exports.post = asyncHandler(async (req, res, next) => {
 
         //getting the user who made the post
 
-        post = post.toObject();
+
         post.username = poster[0].username
 
 
@@ -193,7 +199,7 @@ exports.likePost = asyncHandler(async (req, res, next) => {
         //get the id of the post and place it in the comment update 
         console.log(req.body.postID)
 
-       let postINFO= await postModel.findOneAndUpdate({ _id: req.body.postID }, { $inc: { "likes": 1 } })
+        let postINFO = await postModel.findOneAndUpdate({ _id: req.body.postID }, { $inc: { "likes": 1 } })
 
 
         // let commentUpdate= await comment.findOneAndUpdate({_id:req.headers.id})
@@ -208,8 +214,8 @@ exports.likePost = asyncHandler(async (req, res, next) => {
 exports.likeComment = asyncHandler(async (req, res, next) => {
     try {
         //get the id of the post and place it in the comment update 
-    
-       let commentInfo= await commentModel.findOneAndUpdate({ _id: req.body.commentID }, { $inc: { "likes": 1 } })
+
+        let commentInfo = await commentModel.findOneAndUpdate({ _id: req.body.commentID }, { $inc: { "likes": 1 } })
 
         // let commentUpdate= await comment.findOneAndUpdate({_id:req.headers.id})
         res.json(commentInfo)

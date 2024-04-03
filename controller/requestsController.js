@@ -5,11 +5,6 @@ const profileModel = require("../models/profile")
 
 exports.reqFriend = asyncHandler(async (req, res, next) => {
 
-    //get the profile of the person your tring to freind 
-    let filter = req.body.friendedUser;
-    const update = { requests: req.userData.currentUser._id };
-
-    console.log("user being freindined " + filter + " user trying to friend " + req.userData.currentUser._id)
     // function findOneAndUpdate(filter, update, options
     //you and other user changing their freind status
     await profileModel.findOneAndUpdate({ "user": req.body.friendedUser }, { "$push": { requests: req.userData.currentUser._id } })
@@ -82,7 +77,8 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
 
         let postFeed = await postModel.find({ 'user': { $in: friends } }).sort({ createdAt: -1 }).limit(5)
         //loop through the user and then exchange that section of the post iwth a username 
-
+        // postFeed=postFeed.toObject()
+        // postFeed.createdAt=postFeed.createdAt.toISOString().substring(0, 10);
         let userArr = [];
         // console.log("before "+postFeed)
 
@@ -101,18 +97,17 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
 
         //convert to a mutable object
         let newFeed = postFeed.map(function (element, index) {
-
+           
             return element.toObject()
         })
-
-
+     
         // let responseJSon
 
         newFeed.forEach(function (element, index) {
             //remove the 
             // console.log(element.user.toHexString())
             //loop through and change it for the correc tone
-
+           element.createdAt= element.createdAt.toISOString().substring(0, 10);
             let currentUser = element.user.toHexString()
             //remove the 
 
@@ -215,7 +210,6 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
 });
 
 exports.users = asyncHandler(async (req, res, next) => {
-
     try {
 
         let currentUser = await profileModel.find({ user: req.userData.currentUser._id })
@@ -228,16 +222,14 @@ exports.users = asyncHandler(async (req, res, next) => {
         
         //just usernames  
         users = users.map((e) => {
-            return e.username
+           let result= {id:e._id,username:e.username}
+            return result
         })
 
         res.json(users)
     } catch {
         res.json("no users for you")
     }
-
-
-
 });
 
 
