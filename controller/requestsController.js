@@ -181,7 +181,7 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
             //remove the 
             // console.log(element.user.toHexString())
             //loop through and change it for the correc tone
-
+            element.createdAt= element.createdAt.toISOString().substring(0, 10);
             let currentUser = element.user.toHexString()
             //remove the 
 
