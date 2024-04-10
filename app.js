@@ -56,7 +56,7 @@ const verifyToken = function (req, res, next) {
 
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
-      res.sendStatus(403);
+      res.json(403);
     } else {
       req.userData = authData;
 
@@ -87,7 +87,7 @@ function formatToken(req, res, next) {
     next();
   } else {
     // Forbidden
-    res.sendStatus(403);
+    res.json(403);
   }
 }
 
@@ -180,8 +180,6 @@ app.use(function (err, req, res, next) {
 
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
-
-
 
 
 
