@@ -38,15 +38,12 @@ db.on("error", console.error.bind(console, "mongo connection error"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(cors())
 
 
 app.use('/login', loginRouter);
-
-//put the auth middleware after so the login info doesnt need auth info
 
 //CORS 
 
@@ -141,7 +138,7 @@ app.post('/uploads', upload.single('picture'), async function (req, res) {
     //store this in the user profile 
 
 
-    console.log(req.userData.currentUser._id)
+ 
     // find and updat
     let response = await profileModel.findOneAndUpdate({ user: req.userData.currentUser._id }, { "profilePic": cloudRES.url }, { new: true })
 

@@ -10,7 +10,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
     let pendingReq = false
     // false= your profile true = someone elses 
     let reqType = false;
-    console.log(givenUser)
+   
     try {
 
         //your own profile

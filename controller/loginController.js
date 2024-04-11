@@ -59,7 +59,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
             let userProfile = {
                 posts: [],
                 comments: [],
-                friends: [],
+                friends: ["65bd9b35c53312acbdd7f9ed","65bda19f59a02b3a29aaefa8","65e208310679e92fe5b605bb","65e20b24fb92d070f0398387"],
                 picture: "this is a new test user profile",
                 user: result.id,
                 requests:[]
