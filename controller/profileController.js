@@ -100,31 +100,3 @@ exports.profile = asyncHandler(async (req, res, next) => {
 });
 
 
-// exports.userProfile = asyncHandler(async (req, res, next) => {
-//     //usersname changed to object id 
-//     let username = req.body.username
-
-//     try {
-//         console.log(username)
-//         let user = await userModel.find({ 'username': username })
-
-//         userID = user[0]._id.toHexString()
-
-//         let profile = await profileModel.find({ 'user': userID })
-
-//         profile = profile[0]
-
-//         let profileInfo = {
-//             profilePic: profile.picture,
-//             username: username,
-//             posts: profile.posts,
-//             postTotal: profile.posts.length,
-//             friendTotal: profile.friends.length
-//         }
-
-//         res.json(profileInfo)
-//     } catch {
-//         res.json("went wrong")
-//     }
-
-// });

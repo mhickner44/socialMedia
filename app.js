@@ -106,28 +106,31 @@ const profileModel = require('./models/profile')
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, 'fileStorage/')
+    callback(null, 'temp_files/')
   },
   filename: (req, file, callback) => {
     let filename = `image-${Date.now()}.${file.originalname}`
     callback(null, filename)
     req.filename = filename
     req.name = file.originalname
+    console.log(filename)
   }
 })
 const upload = multer({ storage });
 
-app.use('/uploads', express.static(path.join(__dirname, 'fileStorage')));
+app.use('/uploads', express.static(path.join(__dirname, 'temp_files')));
 
 app.post('/uploads', upload.single('picture'), async function (req, res) {
   try {
-    let cloudRES = await cloudinary.uploader.upload(`/home/mhick/repos/socialMedia/fileStorage/${req.filename}`,
+   
 
+    let cloudRES = await cloudinary.uploader.upload(`./temp_files/${req.filename}`,
+   
       { folder: "devTop", public_id: req.userData.currentUser.username+req.name },
       function (error, result) { console.log(result) });
     //delete the picture from the project
 
-    fs.unlink(`fileStorage/${req.filename}`, (err) => {
+    fs.unlink(`temp_files/${req.filename}`, (err) => {
       if (err) {
         console.error(err);
         return;
@@ -136,16 +139,13 @@ app.post('/uploads', upload.single('picture'), async function (req, res) {
     });
 
     //store this in the user profile 
-
-
- 
     // find and updat
     let response = await profileModel.findOneAndUpdate({ user: req.userData.currentUser._id }, { "profilePic": cloudRES.url }, { new: true })
 
 
-    res.json(response)
+    res.json("file uploaded")
   }
-  catch { res.json("error in profile pic uplaod") }
+  catch { res.json("error in profile pic upload") }
 })
 
 // // catch 404 and forward to error handler
