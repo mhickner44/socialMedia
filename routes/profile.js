@@ -4,11 +4,7 @@ const profileController = require("../controller/profileController")
 
 // const profileModel=require('../models/profile')
 
-// profile
 
-// profile    displays your profile
-// profile/id   others profile
-// profile/
 
 //this gets your profile
 

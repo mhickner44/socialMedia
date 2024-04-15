@@ -10,7 +10,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
     let pendingReq = false
     // false= your profile true = someone elses 
     let reqType = false;
-   
+
     try {
 
         //your own profile
@@ -23,6 +23,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
         //is your profile or another persons?
         if (givenUser != "undefined") {
             //another user 
+
             user = await userModel.find({ 'username': givenUser })
 
 
@@ -30,6 +31,7 @@ exports.profile = asyncHandler(async (req, res, next) => {
             userID = user[0]._id.toHexString()
 
             user = user[0]
+
             reqType = true;
 
             //get users  profile
@@ -48,30 +50,49 @@ exports.profile = asyncHandler(async (req, res, next) => {
             });
 
             //checking requests to see if you have one pending
-            reqProfile[0].requests.forEach(request => {
-                request = request._id.toHexString()
+            if (reqProfile[0].requests != undefined) {
+                console.log("i aran ")
+                reqProfile[0].requests.forEach(request => {
+                    request = request._id.toHexString()
 
-                //or if its your own or just change 
-                //if the current user profile im getting matches the one I got and is in my friends then it is a freind
-                if (request === req.userData.currentUser._id) {
-                    pendingReq = true;
-                }
-            });
+                    //or if its your own or just change 
+                    //if the current user profile im getting matches the one I got and is in my friends then it is a freind
+                    if (request === req.userData.currentUser._id) {
+                        pendingReq = true;
+                    }
+                });
+            }
 
-            //check to see if you are friends are not 
+    
+      let posts = reqProfile[0].posts
+
+            let postCount = 0;
+            console.log(reqProfile[0].posts)
+
+            if (reqProfile[0].posts == undefined) {
+                posts = []
+            }
+
+  console.log(posts)
+            if (reqProfile[0].posts != undefined) {
+             
+                postCount = reqProfile[0].posts.length
+            }
+
 
             let guestInfo = {
                 profilePic: reqProfile[0].profilePic,
                 username: user.username,
-                posts: reqProfile[0].posts,
-                postTotal: reqProfile[0].posts.length,
-                friendTotal: reqProfile[0].friends.length,
+                posts: posts,
+                postTotal: postCount,
+                friendTotal: postCount,
                 currentFriend: currentFriend,
                 requested: pendingReq,
                 reqType: reqType,
                 userID: userID,
-                
+
             }
+
             res.json(guestInfo)
 
         } else {

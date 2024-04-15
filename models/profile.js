@@ -10,7 +10,7 @@ const profileSchema = new Schema(
         posts: { type: [Schema.Types.ObjectId], required: true },
         comments: { type: [Schema.Types.ObjectId], required: true },
         friends: { type: [Schema.Types.ObjectId] },
-        picture: { type: String, required: true },
+        picture: { type: String},
         user: { type: Schema.Types.ObjectId, required: true },
         profilePic:{type: String},
         requests: { type: [Schema.Types.ObjectId], required: true },
