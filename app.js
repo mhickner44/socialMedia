@@ -53,6 +53,7 @@ const verifyToken = function (req, res, next) {
 
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
+    
       res.json(403);
     } else {
       req.userData = authData;
@@ -84,6 +85,7 @@ function formatToken(req, res, next) {
     next();
   } else {
     // Forbidden
+   
     res.json(403);
   }
 }

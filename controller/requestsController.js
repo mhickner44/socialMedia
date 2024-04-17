@@ -80,7 +80,7 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
         // postFeed=postFeed.toObject()
         // postFeed.createdAt=postFeed.createdAt.toISOString().substring(0, 10);
         let userArr = [];
-        // console.log("before "+postFeed)
+     
 
 
         postFeed.map(function (element) {
@@ -105,7 +105,7 @@ exports.getFeed = asyncHandler(async (req, res, next) => {
 
         newFeed.forEach(function (element, index) {
             //remove the 
-            // console.log(element.user.toHexString())
+         
             //loop through and change it for the correc tone
            element.createdAt= element.createdAt.toISOString().substring(0, 10);
             let currentUser = element.user.toHexString()
@@ -179,7 +179,7 @@ exports.refreshFeed = asyncHandler(async (req, res, next) => {
 
         newFeed.forEach(function (element, index) {
             //remove the 
-            // console.log(element.user.toHexString())
+            
             //loop through and change it for the correc tone
             element.createdAt= element.createdAt.toISOString().substring(0, 10);
             let currentUser = element.user.toHexString()

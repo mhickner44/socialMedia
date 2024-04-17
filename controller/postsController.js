@@ -18,7 +18,7 @@ exports.feed = asyncHandler(async (req, res, next) => {
 
     let posts = await postModel.find({ 'user': { $in: friendsList[0].friends } })
     posts = posts.toObject()
-    
+
     posts.createdAt = posts.createdAt.toISOString().substring(0, 10);
     res.json(posts)
 })
@@ -58,7 +58,7 @@ exports.createPost = asyncHandler(async (req, res, next) => {
 exports.createComment = asyncHandler(async (req, res, next) => {
 
     try {
-       
+
         let commentDetail = {
             userID: req.userData.currentUser._id,
             comment: req.body.comment,
@@ -70,14 +70,14 @@ exports.createComment = asyncHandler(async (req, res, next) => {
         //create the comment 
         let newComment = new commentModel(commentDetail);
         commentDetail = await newComment.save();
-      
+
 
         //will need to add the comment id to the post 
         await postModel.findById(req.body.postID)
 
         let post = await postModel.findOneAndUpdate({ "_id": req.body.postID }, { "$push": { comments: commentDetail._id } })
 
-       
+
 
         res.json("comment created")
     } catch {
@@ -106,11 +106,16 @@ exports.userPosts = asyncHandler(async (req, res, next) => {
             yourProfile = await profileModel.find({ user: req.userData.currentUser._id })
         }
 
-        postArr = yourProfile[0].posts.map((post) => post._id.toString())
 
-        postContent = await postModel.find({ '_id': { $in: postArr } })
+       
 
+        if (yourProfile[0].posts) {
+            postArr = yourProfile[0].posts.map((post) => post._id.toString())
 
+            postContent = await postModel.find({ '_id': { $in: postArr } })
+
+        } else { postContent = [] }
+        
         res.json(postContent)
     } catch (err) {
 
@@ -129,14 +134,14 @@ exports.post = asyncHandler(async (req, res, next) => {
     try {
         //get the post information 
         let post = await postModel.findById(req.headers.postid)
-       
-        
+
+
         let poster = await userModel.find({ _id: post.user.toHexString() })
 
         post = post.toObject()
         // post.createdAt = post.createdAt.substring(0, 10)
         post.createdAt = post.createdAt.toISOString().substring(0, 10);
-        
+
 
         let comments = await commentModel.find({ '_id': { $in: post.comments } })
 
@@ -172,10 +177,7 @@ exports.post = asyncHandler(async (req, res, next) => {
 
 
         //getting the user who made the post
-
-
         post.username = poster[0].username
-
 
 
         responsejSON = {
@@ -197,7 +199,7 @@ exports.post = asyncHandler(async (req, res, next) => {
 exports.likePost = asyncHandler(async (req, res, next) => {
     try {
         //get the id of the post and place it in the comment update 
-      
+
 
         let postINFO = await postModel.findOneAndUpdate({ _id: req.body.postID }, { $inc: { "likes": 1 } })
 

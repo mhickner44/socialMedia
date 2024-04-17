@@ -12,7 +12,7 @@ const profileController = require("../controller/profileController")
 router.get("/", profileController.profile)
 
 
-
+router.get("/myProfile", profileController.myProfile)
 
 
 

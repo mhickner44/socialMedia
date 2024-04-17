@@ -6,10 +6,10 @@ const jwt = require("jsonwebtoken")
 
 exports.login = asyncHandler(async (req, res, next) => {
     //verify that the user info is correct 
-
+   
 
     let currentUser = await user.findOne({ "username": req.body.username })
-
+ 
     //if no user found 
     if (currentUser == null) {
         res.json("no user")
@@ -60,7 +60,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
                 posts: [],
                 comments: [],
                 friends: ["65bd9b35c53312acbdd7f9ed","65bda19f59a02b3a29aaefa8","65e208310679e92fe5b605bb","65e20b24fb92d070f0398387"],
-                picture: "null",
+                profilePic: "https://res.cloudinary.com/dvef6co9u/image/upload/v1713149803/devTop/blank_v63db2.jpg",
                 user: result.id,
                 requests:[]
             }
